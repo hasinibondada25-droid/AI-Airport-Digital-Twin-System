@@ -1,0 +1,22 @@
+{
+  "name": "airport-digital-twin-backend",
+  "version": "1.0.0",
+  "description": "Node.js backend for AI Airport Digital Twin System",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed": "node ../scripts/seedDatabase.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.6.3",
+    "socket.io": "^4.7.2",
+    "axios": "^1.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

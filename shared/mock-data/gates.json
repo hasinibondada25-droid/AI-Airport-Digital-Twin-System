@@ -1,0 +1,22 @@
+[
+  { "gateId": "G1", "name": "Gate 1", "terminal": "T1", "capacity": 200, "currentLoad": 0, "status": "available" },
+  { "gateId": "G2", "name": "Gate 2", "terminal": "T1", "capacity": 180, "currentLoad": 0, "status": "available" },
+  { "gateId": "G3", "name": "Gate 3", "terminal": "T1", "capacity": 220, "currentLoad": 90, "status": "occupied", "currentFlightId": "6E202" },
+  { "gateId": "G4", "name": "Gate 4", "terminal": "T1", "capacity": 200, "currentLoad": 0, "status": "available" },
+  { "gateId": "G5", "name": "Gate 5", "terminal": "T1", "capacity": 190, "currentLoad": 75, "status": "occupied", "currentFlightId": "SG303" },
+  { "gateId": "G6", "name": "Gate 6", "terminal": "T1", "capacity": 210, "currentLoad": 0, "status": "maintenance" },
+  { "gateId": "G7", "name": "Gate 7", "terminal": "T1", "capacity": 200, "currentLoad": 0, "status": "available" },
+  { "gateId": "G8", "name": "Gate 8", "terminal": "T1", "capacity": 250, "currentLoad": 0, "status": "available" },
+  { "gateId": "G9", "name": "Gate 9", "terminal": "T1", "capacity": 200, "currentLoad": 0, "status": "available" },
+  { "gateId": "G10", "name": "Gate 10", "terminal": "T1", "capacity": 230, "currentLoad": 0, "status": "available" },
+  { "gateId": "G11", "name": "Gate 11", "terminal": "T1", "capacity": 200, "currentLoad": 0, "status": "available" },
+  { "gateId": "G12", "name": "Gate 12", "terminal": "T1", "capacity": 200, "currentLoad": 0, "status": "available" },
+  { "gateId": "G13", "name": "Gate 13", "terminal": "T2", "capacity": 300, "currentLoad": 0, "status": "available" },
+  { "gateId": "G14", "name": "Gate 14", "terminal": "T2", "capacity": 300, "currentLoad": 0, "status": "available" },
+  { "gateId": "G15", "name": "Gate 15", "terminal": "T2", "capacity": 350, "currentLoad": 0, "status": "available" },
+  { "gateId": "G16", "name": "Gate 16", "terminal": "T2", "capacity": 280, "currentLoad": 0, "status": "available" },
+  { "gateId": "G17", "name": "Gate 17", "terminal": "T2", "capacity": 320, "currentLoad": 0, "status": "available" },
+  { "gateId": "G18", "name": "Gate 18", "terminal": "T2", "capacity": 300, "currentLoad": 0, "status": "available" },
+  { "gateId": "G19", "name": "Gate 19", "terminal": "T2", "capacity": 280, "currentLoad": 0, "status": "available" },
+  { "gateId": "G20", "name": "Gate 20", "terminal": "T2", "capacity": 350, "currentLoad": 0, "status": "available" }
+]

@@ -1,0 +1,13 @@
+{
+  "name": "ai-airport-digital-twin",
+  "version": "1.0.0",
+  "description": "Full-stack AI Airport Digital Twin System",
+  "scripts": {
+    "install:all": "cd frontend && npm install && cd \"backend - node\" && npm install",
+    "frontend": "cd frontend && npm start",
+    "backend": "cd \"backend - node\" && npm run dev",
+    "flask": "cd ai-service-flask && python run.py",
+    "seed": "cd \"backend - node\" && npm run seed",
+    "simulation": "cd \"backend - node\" && node ../scripts/simulationRunner.js"
+  }
+}

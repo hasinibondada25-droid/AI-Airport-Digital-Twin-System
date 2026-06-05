@@ -1,0 +1,77 @@
+{
+  "weather": {
+    "label": "Weather Event",
+    "icon": "🌤️",
+    "severities": ["low", "medium", "high"],
+    "titles": {
+      "low": "Light Rain Expected",
+      "medium": "Storm Warning",
+      "high": "Severe Weather Alert"
+    },
+    "impacts": {
+      "flights": true,
+      "gates": true,
+      "passengers": true
+    }
+  },
+  "security": {
+    "label": "Security Event",
+    "icon": "🔒",
+    "severities": ["low", "medium", "high", "critical"],
+    "titles": {
+      "low": "Suspicious Activity Reported",
+      "medium": "Security Breach Detected",
+      "high": "Terminal Lockdown Initiated",
+      "critical": "Active Threat Alert"
+    },
+    "impacts": {
+      "flights": true,
+      "gates": true,
+      "passengers": true
+    }
+  },
+  "technical": {
+    "label": "Technical Issue",
+    "icon": "🔧",
+    "severities": ["low", "medium", "high"],
+    "titles": {
+      "low": "System Maintenance Required",
+      "medium": "System Outage Reported",
+      "high": "Critical System Failure"
+    },
+    "impacts": {
+      "flights": true,
+      "gates": true,
+      "passengers": false
+    }
+  },
+  "operational": {
+    "label": "Operational Issue",
+    "icon": "⚙️",
+    "severities": ["low", "medium", "high"],
+    "titles": {
+      "low": "Staff Shortage",
+      "medium": "Runway Closure",
+      "high": "Airport Closure"
+    },
+    "impacts": {
+      "flights": true,
+      "gates": false,
+      "passengers": true
+    }
+  },
+  "emergency": {
+    "label": "Emergency",
+    "icon": "🚨",
+    "severities": ["high", "critical"],
+    "titles": {
+      "high": "Medical Emergency",
+      "critical": "Full Emergency Response"
+    },
+    "impacts": {
+      "flights": true,
+      "gates": true,
+      "passengers": true
+    }
+  }
+}
