@@ -8,6 +8,11 @@
     "backend": "cd \"backend - node\" && npm run dev",
     "flask": "cd ai-service-flask && python run.py",
     "seed": "cd \"backend - node\" && npm run seed",
-    "simulation": "cd \"backend - node\" && node ../scripts/simulationRunner.js"
+    "simulation": "cd \"backend - node\" && node ../scripts/simulationRunner.js",
+    "render-build": "cd frontend && npm install && npm run build",
+    "render-start": "node \"backend - node/src/server.js\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
