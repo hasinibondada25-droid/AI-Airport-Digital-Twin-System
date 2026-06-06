@@ -31,7 +31,7 @@ export default function AdminPanel() {
       const [fRes, gRes, eRes] = await Promise.all([
         api.getFlights(),
         api.getGates(),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/events`).catch(() => ({ json: () => ({ data: [] }) }))
+        fetch(`${import.meta.env.VITE_API_URL || ''}/api/events`).catch(() => ({ json: () => ({ data: [] }) }))
       ]);
       if (fRes.success) setFlights(fRes.data);
       if (gRes.success) setGates(gRes.data);
@@ -104,15 +104,15 @@ export default function AdminPanel() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 400 }}>
             <div className="form-group">
               <label className="form-label">Backend API URL</label>
-              <input className="form-input" value={import.meta.env.VITE_API_URL || 'http://localhost:5000'} readOnly />
+              <input className="form-input" value={import.meta.env.VITE_API_URL || '(same origin)'} readOnly />
             </div>
             <div className="form-group">
               <label className="form-label">Flask AI URL</label>
-              <input className="form-input" value={import.meta.env.VITE_FLASK_URL || 'http://localhost:5001'} readOnly />
+              <input className="form-input" value={import.meta.env.VITE_FLASK_URL || '(same origin)'} readOnly />
             </div>
             <div className="form-group">
               <label className="form-label">Socket URL</label>
-              <input className="form-input" value={import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000'} readOnly />
+              <input className="form-input" value={import.meta.env.VITE_SOCKET_URL || '(same origin)'} readOnly />
             </div>
             <div className="card" style={{ background: 'var(--bg-input)' }}>
               <div className="metrics-row">

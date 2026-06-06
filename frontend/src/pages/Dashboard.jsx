@@ -47,10 +47,17 @@ export default function Dashboard() {
       }));
     });
 
+    const handleConnect = () => setState(prev => ({ ...prev, connected: true }));
+    const handleDisconnect = () => setState(prev => ({ ...prev, connected: false }));
+    socketService.on('connect', handleConnect);
+    socketService.on('disconnect', handleDisconnect);
+
     socketService.connect();
 
     return () => {
       socketService.off('state-update', handleStateUpdate);
+      socketService.off('connect', handleConnect);
+      socketService.off('disconnect', handleDisconnect);
     };
   }, [handleStateUpdate]);
 
