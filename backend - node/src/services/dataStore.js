@@ -16,16 +16,32 @@ function loadMockData() {
 
     if (fs.existsSync(flightsPath)) {
       const fData = JSON.parse(fs.readFileSync(flightsPath, 'utf8'));
-      flights.push(...fData.map(f => ({
+      const parsed = fData.map(f => ({
         ...f,
-        _id: f.flightId,
         scheduledDeparture: new Date(f.scheduledDeparture),
         scheduledArrival: new Date(f.scheduledArrival),
         estimatedDeparture: f.estimatedDeparture ? new Date(f.estimatedDeparture) : null,
         estimatedArrival: f.estimatedArrival ? new Date(f.estimatedArrival) : null,
-        save: async function () { return updateFlight(this.flightId, this); },
-        toObject: function () { return { ...this }; }
-      })));
+      }));
+
+      const earliestDep = parsed.reduce((min, f) => f.scheduledDeparture < min ? f.scheduledDeparture : min, parsed[0].scheduledDeparture);
+      const now = new Date();
+      const shiftMs = now.getTime() - earliestDep.getTime() + 30 * 60 * 1000;
+
+      flights.push(...parsed.map(f => {
+        const shiftedDep = new Date(f.scheduledDeparture.getTime() + shiftMs);
+        const shiftedArr = new Date(f.scheduledArrival.getTime() + shiftMs);
+        return {
+          ...f,
+          _id: f.flightId,
+          scheduledDeparture: shiftedDep,
+          scheduledArrival: shiftedArr,
+          estimatedDeparture: f.estimatedDeparture ? new Date(f.estimatedDeparture.getTime() + shiftMs) : null,
+          estimatedArrival: f.estimatedArrival ? new Date(f.estimatedArrival.getTime() + shiftMs) : null,
+          save: async function () { return updateFlight(this.flightId, this); },
+          toObject: function () { return { ...this }; }
+        };
+      }));
     }
 
     if (fs.existsSync(gatesPath)) {
