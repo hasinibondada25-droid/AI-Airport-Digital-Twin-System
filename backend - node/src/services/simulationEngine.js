@@ -77,6 +77,7 @@ class SimulationEngine {
     advanceTime();
 
     try {
+      this.assignGates();
       this.updateFlights();
       this.updateGates();
       this.updatePassengers();
@@ -245,6 +246,25 @@ class SimulationEngine {
         this.flightCounter++;
         store.addFlight(generateRandomFlight(this.flightCounter));
       }
+    }
+  }
+
+  assignGates() {
+    const unassigned = store.getFlights().filter(f =>
+      !f.gate && ['scheduled', 'boarding', 'delayed'].includes(f.status)
+    );
+    const available = store.getGates().filter(g => g.status === 'available');
+
+    for (const flight of unassigned) {
+      if (available.length === 0) break;
+      const gate = available.shift();
+      gate.status = 'occupied';
+      gate.currentFlightId = flight.flightId;
+      gate.currentLoad = Math.floor(Math.random() * 60) + 10;
+      flight.gate = gate.gateId;
+      flight.terminal = gate.terminal;
+      store.updateGate(gate.gateId, gate);
+      store.updateFlight(flight.flightId, flight);
     }
   }
 

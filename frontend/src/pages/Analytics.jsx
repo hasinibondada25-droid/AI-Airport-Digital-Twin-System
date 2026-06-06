@@ -17,7 +17,7 @@ export default function Analytics() {
   const [aiPrediction, setAiPrediction] = useState(null);
 
   useEffect(() => {
-    socketService.on('state-update', (data) => {
+    const handleStateUpdate = (data) => {
       if (data.metrics) {
         setMetrics(prev => ({
           ...prev,
@@ -38,7 +38,14 @@ export default function Analytics() {
           ]
         }));
       }
-    });
+    };
+
+    socketService.on('state-update', handleStateUpdate);
+    socketService.connect();
+
+    return () => {
+      socketService.off('state-update', handleStateUpdate);
+    };
   }, []);
 
   useEffect(() => {

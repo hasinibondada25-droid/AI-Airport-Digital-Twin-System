@@ -27,7 +27,7 @@ export default function SimulationView() {
   const [scenarioResult, setScenarioResult] = useState(null);
 
   useEffect(() => {
-    socketService.on('state-update', (data) => {
+    const handleStateUpdate = (data) => {
       setState(prev => ({
         ...prev,
         flights: data.flights || prev.flights,
@@ -36,20 +36,23 @@ export default function SimulationView() {
         metrics: data.metrics || prev.metrics,
         tick: data.tick || prev.tick
       }));
-    });
+    };
 
-    socketService.on('passenger-update', (data) => {
+    const handlePassengerUpdate = (data) => {
       setState(prev => ({
         ...prev,
         passengerStages: data.stages,
         totalPassengers: data.totalPassengers
       }));
-    });
+    };
 
+    socketService.on('state-update', handleStateUpdate);
+    socketService.on('passenger-update', handlePassengerUpdate);
     socketService.connect();
 
     return () => {
-      socketService.disconnect();
+      socketService.off('state-update', handleStateUpdate);
+      socketService.off('passenger-update', handlePassengerUpdate);
     };
   }, []);
 
