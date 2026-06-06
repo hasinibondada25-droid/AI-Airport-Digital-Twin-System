@@ -7,6 +7,8 @@ const AIRPORTS = [
   { code: 'MAA', name: 'Chennai International Airport', city: 'Chennai', lat: 12.9815, lng: 80.1640, terminals: 3 },
   { code: 'CCU', name: 'Netaji Subhas Chandra Bose International Airport', city: 'Kolkata', lat: 22.6547, lng: 88.4467, terminals: 2 },
   { code: 'HYD', name: 'Rajiv Gandhi International Airport', city: 'Hyderabad', lat: 17.2313, lng: 78.4299, terminals: 1 },
+  { code: 'VGA', name: 'Gannavaram Airport', city: 'Vijayawada', lat: 16.5308, lng: 80.7969, terminals: 1 },
+  { code: 'RJA', name: 'Rajahmundry Airport', city: 'Rajahmundry', lat: 17.1100, lng: 81.8182, terminals: 1 },
   { code: 'AMD', name: 'Sardar Vallabhbhai Patel International Airport', city: 'Ahmedabad', lat: 23.0742, lng: 72.6344, terminals: 2 },
   { code: 'PNQ', name: 'Pune International Airport', city: 'Pune', lat: 18.5852, lng: 73.9193, terminals: 1 },
   { code: 'JAI', name: 'Jaipur International Airport', city: 'Jaipur', lat: 26.8244, lng: 75.8089, terminals: 1 },

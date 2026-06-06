@@ -14,6 +14,7 @@ const airlines = [
 const cities = [
   'Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Kolkata',
   'Hyderabad', 'Ahmedabad', 'Pune', 'Jaipur', 'Goa',
+  'Vijayawada', 'Rajahmundry', 'Visakhapatnam', 'Tirupati',
   'Dubai', 'London', 'New York', 'Singapore', 'Bangkok',
   'Paris', 'Frankfurt', 'Tokyo', 'Sydney', 'Toronto'
 ];
