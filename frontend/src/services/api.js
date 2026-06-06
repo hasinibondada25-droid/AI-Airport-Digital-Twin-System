@@ -50,6 +50,8 @@ export const api = {
   predictCrowd: (data) => request('/api/ai/predict-crowd', { method: 'POST', body: data }),
   optimizeGates: (data) => request('/api/ai/optimize-gates', { method: 'POST', body: data }),
   runScenario: (data) => request('/api/ai/scenario', { method: 'POST', body: data }),
+  predictRunway: (data) => request('/api/ai/predict-runway', { method: 'POST', body: data }),
+  generateAlerts: (data) => request('/api/ai/generate-alerts', { method: 'POST', body: data }),
 
   // Simulation
   getStatus: () => request('/api/simulation/status'),

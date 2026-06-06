@@ -7,6 +7,7 @@ import PassengerFlow from '../components/PassengerFlow';
 import ControlTower from '../components/ControlTower';
 import AirportLocator from '../components/AirportLocator';
 import LiveDataPanel from '../components/LiveDataPanel';
+import RunwayTraffic from '../components/RunwayTraffic';
 import socketService from '../services/socket';
 
 export default function Dashboard() {
@@ -69,13 +70,13 @@ export default function Dashboard() {
       <div className="page-header">
         <h1 className="page-title">Dashboard</h1>
         <div className="flight-status-bar">
-          <span>🔄 Tick: <strong>{state.tick}</strong></span>
+          <span> Tick: <strong>{state.tick}</strong></span>
           <span>
             <span className={`status-dot ${state.connected ? 'online' : 'offline'}`} />
             {state.connected ? 'Connected' : 'Disconnected'}
           </span>
           {metrics.efficiencyScore !== undefined && (
-            <span>📊 Efficiency: <strong>{Math.round(metrics.efficiencyScore)}%</strong></span>
+            <span> Efficiency: <strong>{Math.round(metrics.efficiencyScore)}%</strong></span>
           )}
         </div>
       </div>
@@ -115,7 +116,7 @@ export default function Dashboard() {
         <div className="grid" style={{ gap: 20 }}>
           <AirportMap gates={gates} flights={flights} />
           <div className="grid grid-cols-2" style={{ gap: 20 }}>
-            <AlertsPanel events={events} />
+            <AlertsPanel events={events} flights={flights} gates={gates} metrics={metrics} />
             <ControlTower />
           </div>
         </div>
@@ -123,11 +124,11 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-2" style={{ marginBottom: 20, gap: 20 }}>
         <PassengerFlow stages={passengerStages || {}} totalPassengers={totalPassengers || 0} />
-        <AirportLocator />
+        <RunwayTraffic metrics={metrics} />
       </div>
       <div className="grid grid-cols-2" style={{ gap: 20 }}>
         <LiveDataPanel />
-        <div />
+        <AirportLocator />
       </div>
     </div>
   );

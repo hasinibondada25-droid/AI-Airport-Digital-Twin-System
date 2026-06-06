@@ -53,3 +53,23 @@ exports.runScenario = async (req, res) => {
     res.json({ success: true, data: fallback, source: 'fallback' });
   }
 };
+
+exports.predictRunway = async (req, res) => {
+  try {
+    const result = await aiService.predictRunway(req.body);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    const fallback = aiService.getFallbackRunwayPrediction(req.body);
+    res.json({ success: true, data: fallback, source: 'fallback' });
+  }
+};
+
+exports.generateAlerts = async (req, res) => {
+  try {
+    const result = await aiService.generateAlerts(req.body);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    const fallback = aiService.getFallbackAlerts(req.body);
+    res.json({ success: true, data: fallback, source: 'fallback' });
+  }
+};

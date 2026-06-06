@@ -84,6 +84,7 @@ class SimulationEngine {
       this.checkAndGenerateEvents();
       this.checkAndGenerateFlights();
       this.updateMetrics();
+      this.emitSmartAlerts();
       this.emitState();
     } catch (err) {
       console.error('Simulation tick error:', err.message);
@@ -284,6 +285,9 @@ class SimulationEngine {
     const delayRate = this.metrics.totalDelays / Math.max(1, this.metrics.totalFlightsProcessed);
     this.metrics.delayHistory.push(delayRate * 100);
     if (this.metrics.delayHistory.length > 100) this.metrics.delayHistory.shift();
+
+    this.metrics.runwayOccupancy = Math.min(100, Math.floor(50 + (Math.random() * 40) + (this.metrics.totalDelays * 0.5)));
+    this.metrics.runwayQueueLength = Math.floor(Math.random() * 8);
   }
 
   async emitState() {
@@ -301,7 +305,9 @@ class SimulationEngine {
         totalGates: allGates.length,
         efficiencyScore: this.calculateEfficiencyScore(),
         congestionIndex: allGates.length > 0 ? ((allGates.length - allGates.filter(g => g.status === 'available').length) / allGates.length) * 100 : 0,
-        delayIndex: 0
+        delayIndex: 0,
+        runwayOccupancy: this.metrics.runwayOccupancy || 0,
+        runwayQueueLength: this.metrics.runwayQueueLength || 0
       };
 
       const activeFlights = metrics.activeFlights;
@@ -318,6 +324,31 @@ class SimulationEngine {
       });
     } catch (err) {
       console.error('Emit state error:', err.message);
+    }
+  }
+
+  async emitSmartAlerts() {
+    if (this.tickCount % 5 !== 0) return;
+
+    try {
+      const flights = store.getFlights().slice(0, 50);
+      const gates = store.getGates();
+      const events = store.getEvents({ status: 'active' }).slice(0, 10);
+      const allGates = store.getGates();
+      const metrics = {
+        congestionIndex: allGates.length > 0 ? ((allGates.length - allGates.filter(g => g.status === 'available').length) / allGates.length) * 100 : 0,
+        efficiencyScore: this.calculateEfficiencyScore(),
+        delayIndex: this.metrics.totalDelays / Math.max(1, this.metrics.totalFlightsProcessed) * 100,
+        totalFlights: flights.length,
+        delayedFlights: flights.filter(f => f.status === 'delayed').length,
+        availableGates: allGates.filter(g => g.status === 'available').length,
+        totalGates: allGates.length
+      };
+
+      const io = getIO();
+      io.to('simulation').emit('smart-alerts', { metrics, flights, gates, events });
+    } catch (e) {
+      // silent
     }
   }
 

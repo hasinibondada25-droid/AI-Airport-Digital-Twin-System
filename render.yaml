@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ai-airport-digital-twin
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd "backend - node" && npm run render-build
+    startCommand: node "backend - node/src/server.js"
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: FLASK_AI_URL
+        value: http://localhost:5001
+      - key: SIMULATION_INTERVAL
+        value: 5000
+      - key: LIVE_AVIATION_API_KEY
+        sync: false

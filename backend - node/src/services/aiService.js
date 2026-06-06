@@ -59,6 +59,39 @@ async function runScenario(scenarioData) {
   }
 }
 
+async function predictRunway(data) {
+  try {
+    const response = await aiClient.post('/predict-runway', {
+      hour: data.hour || new Date().getHours(),
+      scheduled_takeoffs: data.scheduledTakeoffs || data.scheduled_takeoffs || 15,
+      scheduled_landings: data.scheduledLandings || data.scheduled_landings || 15,
+      weather_condition: data.weatherCondition || data.weather_condition || 'clear',
+      runway_count: data.runwayCount || data.runway_count || 2,
+      time_of_day: data.timeOfDay || data.time_of_day || getTimeOfDay()
+    });
+    return response.data;
+  } catch (error) {
+    return getFallbackRunwayPrediction(data);
+  }
+}
+
+async function generateAlerts(data) {
+  try {
+    const response = await aiClient.post('/generate-alerts', data);
+    return response.data;
+  } catch (error) {
+    return getFallbackAlerts(data);
+  }
+}
+
+function getTimeOfDay() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return 'morning';
+  if (h >= 12 && h < 17) return 'afternoon';
+  if (h >= 17 && h < 21) return 'evening';
+  return 'night';
+}
+
 function getFallbackDelayPrediction(data) {
   const hour = data.hour || new Date().getHours();
   const baseRisk = hour >= 17 ? 0.4 : hour >= 12 ? 0.3 : 0.15;
@@ -141,13 +174,70 @@ function getFallbackScenarioResult(data) {
   };
 }
 
+function getFallbackRunwayPrediction(data) {
+  const hour = data.hour || new Date().getHours();
+  const weather = data.weather_condition || 'clear';
+  const takeoffs = data.scheduled_takeoffs || 15;
+  const landings = data.scheduled_landings || 15;
+  const total = takeoffs + landings;
+  const weatherFactor = { clear: 1, rain: 1.3, fog: 1.8, storm: 2.5 }[weather] || 1;
+  const peak = [7, 8, 9, 17, 18, 19].includes(hour) ? 1.3 : 1;
+  const capacity = Math.floor(120 / (weatherFactor * peak));
+  const occupancy = Math.min(100, Math.floor((total / capacity) * 100));
+  const queue = Math.max(0, Math.floor((total - capacity * 0.8) * weatherFactor));
+
+  return {
+    runway_occupancy_percentage: occupancy,
+    queue_length: queue,
+    average_wait_minutes: Math.floor(queue * 2),
+    congestion_level: occupancy > 80 ? 'high' : occupancy > 50 ? 'moderate' : 'low',
+    recommended_spacing_seconds: Math.floor(3 * weatherFactor * peak),
+    total_operations: total,
+    effective_hourly_capacity: capacity,
+    recommendations: [
+      occupancy > 70 ? 'Increase aircraft separation' : 'Normal operations',
+      weather !== 'clear' ? `Apply ${weather} procedures` : 'Standard taxi procedures'
+    ]
+  };
+}
+
+function getFallbackAlerts(data) {
+  const flights = data.flights || [];
+  const metrics = data.metrics || {};
+  const alerts = [];
+  const congestion = metrics.congestionIndex || 0;
+  const delayed = metrics.delayedFlights || 0;
+  const total = metrics.totalFlights || 0;
+  const available = metrics.availableGates || 0;
+  const totalGates = metrics.totalGates || 1;
+
+  if (congestion > 70) {
+    alerts.push({ id: `ALT-${Date.now()}-1`, type: 'congestion', severity: 'high', title: 'High Congestion Warning', description: `Congestion at ${Math.round(congestion)}%`, recommendation: 'Open additional lanes', source: 'ai-engine', status: 'active', generated_at: new Date().toISOString() });
+  }
+  if (delayed > 0 && (delayed / Math.max(1, total)) > 0.3) {
+    alerts.push({ id: `ALT-${Date.now()}-2`, type: 'delay', severity: 'medium', title: `${delayed} Flights Delayed`, description: `${Math.round((delayed / Math.max(1, total)) * 100)}% delay rate`, recommendation: 'Review scheduling', source: 'ai-engine', status: 'active', generated_at: new Date().toISOString() });
+  }
+  if (available === 0) {
+    alerts.push({ id: `ALT-${Date.now()}-3`, type: 'gate', severity: 'critical', title: 'No Available Gates', description: 'All gates occupied', recommendation: 'Release gates or divert', source: 'ai-engine', status: 'active', generated_at: new Date().toISOString() });
+  }
+  if (alerts.length === 0) {
+    alerts.push({ id: `ALT-${Date.now()}`, type: 'system', severity: 'low', title: 'Normal Operations', description: 'All metrics within threshold', recommendation: 'Continue monitoring', source: 'ai-engine', status: 'active', generated_at: new Date().toISOString() });
+  }
+
+  return { alerts, total_generated: alerts.length };
+}
+
 module.exports = {
   predictDelay,
   predictCrowd,
   optimizeGates,
   runScenario,
+  predictRunway,
+  generateAlerts,
   getFallbackDelayPrediction,
   getFallbackCrowdPrediction,
   getFallbackGateOptimization,
-  getFallbackScenarioResult
+  getFallbackScenarioResult,
+  getFallbackRunwayPrediction,
+  getFallbackAlerts
 };
