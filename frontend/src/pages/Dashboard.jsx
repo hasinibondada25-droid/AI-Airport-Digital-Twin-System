@@ -6,6 +6,7 @@ import AlertsPanel from '../components/AlertsPanel';
 import PassengerFlow from '../components/PassengerFlow';
 import ControlTower from '../components/ControlTower';
 import AirportLocator from '../components/AirportLocator';
+import LiveDataPanel from '../components/LiveDataPanel';
 import socketService from '../services/socket';
 
 export default function Dashboard() {
@@ -120,9 +121,13 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2" style={{ gap: 20 }}>
+      <div className="grid grid-cols-2" style={{ marginBottom: 20, gap: 20 }}>
         <PassengerFlow stages={passengerStages || {}} totalPassengers={totalPassengers || 0} />
         <AirportLocator />
+      </div>
+      <div className="grid grid-cols-2" style={{ gap: 20 }}>
+        <LiveDataPanel />
+        <div />
       </div>
     </div>
   );

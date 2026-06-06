@@ -59,7 +59,14 @@ export const api = {
   triggerEvent: (data) => request('/api/simulation/trigger-event', { method: 'POST', body: data }),
 
   // Health
-  health: () => request('/api/health')
+  health: () => request('/api/health'),
+
+  // Live Aviation Data
+  getLiveStatus: () => request('/api/live/status'),
+  getLiveFlights: (params = '') => request(`/api/live/flights${params}`),
+  getLiveDepartures: (code) => request(`/api/live/flights/departures/${code}`),
+  getLiveArrivals: (code) => request(`/api/live/flights/arrivals/${code}`),
+  seedLiveFlights: () => request('/api/live/seed', { method: 'POST' })
 };
 
 export default api;
