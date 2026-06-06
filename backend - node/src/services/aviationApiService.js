@@ -1,6 +1,19 @@
 const axios = require('axios');
+const path = require('path');
+const fs = require('fs');
 
-const API_KEY = process.env.LIVE_AVIATION_API_KEY || '';
+let configApiKey = '';
+try {
+  const configPath = path.join(__dirname, '../../config/live-api.json');
+  if (fs.existsSync(configPath)) {
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    configApiKey = config.liveAviationApiKey || '';
+  }
+} catch (e) {
+  // config file not available
+}
+
+const API_KEY = process.env.LIVE_AVIATION_API_KEY || configApiKey || '';
 const BASE_URL = 'https://api.aviationstack.com/v1';
 
 const client = axios.create({
