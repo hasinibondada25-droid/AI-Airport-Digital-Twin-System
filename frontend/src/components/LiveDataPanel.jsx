@@ -53,16 +53,18 @@ export default function LiveDataPanel() {
       <div className="card-header">
         <h3 className="card-title">✈️ Live Aviation Data</h3>
         <span className={`badge ${status?.configured ? 'badge-green' : 'badge-yellow'}`}>
-          {status?.configured ? 'API Connected' : 'No API Key'}
+          {status?.configured ? 'API Connected' : 'Demo Mode'}
         </span>
       </div>
 
       {!status?.configured && (
         <div style={{ padding: '8px 12px', marginBottom: 8, background: 'rgba(234,179,8,0.1)', borderRadius: 'var(--radius)', fontSize: 12, color: 'var(--accent-yellow)' }}>
-          Set <code>LIVE_AVIATION_API_KEY</code> env var to enable live data from AviationStack.
+          Running in demo mode with generated flight data.
+          <br />
+          Set <code>LIVE_AVIATION_API_KEY</code> env var for real data from AviationStack.
           <br />
           <a href="https://aviationstack.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-blue)' }}>
-            Get a free API key →
+            Get a free API key
           </a>
         </div>
       )}
@@ -77,7 +79,7 @@ export default function LiveDataPanel() {
         <button className="btn btn-primary btn-sm" onClick={handleFetchLive} disabled={loading}>
           {loading ? 'Fetching...' : '📡 Fetch Live Flights'}
         </button>
-        <button className="btn btn-success btn-sm" onClick={handleSeed} disabled={seeding || !status?.configured}>
+        <button className="btn btn-success btn-sm" onClick={handleSeed} disabled={seeding}>
           {seeding ? 'Seeding...' : '🌱 Seed Simulation'}
         </button>
       </div>

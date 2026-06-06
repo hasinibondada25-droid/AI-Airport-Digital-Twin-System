@@ -5,7 +5,7 @@ exports.getStatus = async (req, res) => {
     success: true,
     data: {
       configured: aviationApi.isConfigured(),
-      provider: 'AviationStack',
+      provider: aviationApi.isConfigured() ? 'AviationStack' : 'Demo Mode',
       lastSync: null
     }
   });
@@ -13,15 +13,6 @@ exports.getStatus = async (req, res) => {
 
 exports.getFlights = async (req, res) => {
   const { dep_iata, arr_iata, flight_status, limit, offset } = req.query;
-
-  if (!aviationApi.isConfigured()) {
-    return res.json({
-      success: false,
-      error: 'Live aviation API not configured. Set LIVE_AVIATION_API_KEY environment variable.',
-      data: [],
-      source: 'none'
-    });
-  }
 
   const params = {};
   if (dep_iata) params.dep_iata = dep_iata;
@@ -36,22 +27,12 @@ exports.getFlights = async (req, res) => {
 
 exports.getFlightsByAirport = async (req, res) => {
   const { code } = req.params;
-
-  if (!aviationApi.isConfigured()) {
-    return res.json({ success: false, error: 'API not configured', data: [] });
-  }
-
   const result = await aviationApi.fetchFlightsByAirport(code.toUpperCase());
   res.json(result);
 };
 
 exports.getArrivalsByAirport = async (req, res) => {
   const { code } = req.params;
-
-  if (!aviationApi.isConfigured()) {
-    return res.json({ success: false, error: 'API not configured', data: [] });
-  }
-
   const result = await aviationApi.fetchArrivalsByAirport(code.toUpperCase());
   res.json(result);
 };
